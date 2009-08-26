@@ -1,20 +1,23 @@
-(define (cons elem list)
+(define (cons elem seq)
   (let ((new-arr (insert! elem (<array>))))
-    (if (nil? list)
+    (if (nil? seq)
         new-arr
-        (append! list new-arr))))
+        (append! seq new-arr))))
 
-(define (car list)
-  (callm first list))
+(define (car seq)
+  (callm first seq))
 
-(define (first list)
-  (callm first list))
+(define (first seq)
+  (callm first seq))
 
-(define (cdr list)
-  (callm rest list))
+(define (cdr seq)
+  (callm rest seq))
 
-(define (rest list)
-  (callm rest list))
+(define (rest seq)
+  (callm rest seq))
+
+(define (last seq)
+  (callm last seq))
 
 (define (reduce fn base-value list)
   (if (empty? list)
@@ -75,3 +78,12 @@
   (if (>= m n)
       '(m)
       (cons m (upto (+ m 1) n))))
+
+(define (split-at n seq)
+  '((take n seq) (drop n seq)))
+
+(define (reverse seq)
+  (callm reverse seq))
+
+(define (reverse! seq)
+  (callm reverse! seq))
