@@ -7,31 +7,31 @@ grammar Lisp
   rule comment do
     ";" (![\n] .)* [\n]? <Comment>
   end
-  
+
   rule cell do
-    space* (list / atom / quoted_list) space* <Cell>
+    space* (quoted_list / list / atom) space* <Cell>
   end
-  
+
   rule list do
     "(" cell* ")" <List>
   end
-  
+
   rule quoted_list do
     "'(" cell* ")" <QuotedList>
   end
-  
+
   rule atom do
     datum / identifier
   end
-  
+
   rule datum do
     boolean / integer / float / string
   end
-  
+
   rule boolean do
     ("#t" / "#f") <Boolean>
   end
-  
+
   rule integer do
     ("-"? "0" / "-"? [1-9] [0-9]*) <Integer>
   end
@@ -43,7 +43,7 @@ grammar Lisp
   rule string do
     '"' string_val:(string_char)* '"' <LispString>
   end
- 
+
   rule string_char do
     !'"' char:(.) {
       def value
@@ -51,19 +51,19 @@ grammar Lisp
       end
     }
   end
-  
+
   rule identifier do
     (!delimiter .)+ <Identifier>
   end
-  
+
   rule space do
     [\s\n\r\t]
   end
-  
+
   rule paren do
     [\(\)\[\]]
   end
-  
+
   rule delimiter do
     paren / space
   end

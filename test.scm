@@ -28,12 +28,19 @@
 
 (hello "christopher")
 
-(print (string-join (list "cool" "yo" "hehe") " "))
+(print (string-join '("cool" "yo" "hehe") " "))
 
-(let ((numbers (list 1 2 3 4)))
+(define (pp obj)
+  (print (inspect obj)))
+
+(let ((numbers '(1 2 3 4)))
   (print "OK")
+  (pp (cons 10 numbers))
+  (pp (append '(10 20 30 40) numbers))
+  (pp (drop 2 numbers))
+  (pp (take 2 numbers)) 
   (if (any? (lambda (x) (> x 2)) numbers)
       (print "there are some greater than 2!")
       (print "there are none greater than 2!")))
 
-(print (rest (list 100 200 300)))
+(print (rest '(100 200 300 a)))

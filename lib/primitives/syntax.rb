@@ -22,6 +22,11 @@ module Primitives
         which.eval(scope)
       end
 
+      syntax('unless') do |scope, cells|
+        which = cells.first.eval(scope) ? cells[2] : cells[1]
+        which.eval(scope)
+      end
+
       syntax('let') do |scope, cells|
         first = cells.first
         case first

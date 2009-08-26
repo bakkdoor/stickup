@@ -26,6 +26,7 @@ class TopLevel < Scope
   include Primitives::Functions
   def initialize(*args)
     super
+
     init_primitive_syntax
     init_primitive_functions
   end
