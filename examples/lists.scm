@@ -9,3 +9,15 @@
       (print "there are none greater than 2!")))
 
 (print (rest '(100 200 300 a)))
+
+(let ((numbers (upto 0 20)))
+  (print "numbers are:")
+  (pp numbers)
+  (print "take 5:")
+  (pp (take 5 numbers))
+  (print "drop 8:")
+  (pp (drop 8 numbers))
+  (print "only even:")
+  (pp (filter even? numbers))
+  (print "only odd:")
+  (pp (filter odd? numbers)))

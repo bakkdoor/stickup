@@ -9,3 +9,9 @@
 
 (define (pp obj)
   (callm pp PP obj))
+
+(define (string obj)
+  (callm to_s obj))
+
+(define (class obj)
+  (callm class obj))
