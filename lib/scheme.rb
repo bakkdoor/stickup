@@ -2,7 +2,13 @@ require 'rubygems'
 require 'treetop'
 
 Treetop.load File.dirname(__FILE__) + '/lisp.treetop'
-%w[lisp scope function].each { |path| require File.dirname(__FILE__) + '/' + path }
+["primitives/syntax",
+ "primitives/functions",
+ "lisp",
+ "scope",
+ "function"].each do |path|
+  require File.dirname(__FILE__) + '/' + path
+end
 
 module Scheme
   def self.run(path, debug_on = false)
@@ -11,11 +17,11 @@ module Scheme
     Dir["core/*.scm"].each do |file|
       parse_eval_file(file, scope)
     end
-    
+
     # finally, parse & eval main file
     parse_eval_file(path, scope, debug_on)
   end
-  
+
   def self.parse(string)
     @parser ||= LispParser.new
     @parser.parse(string)
@@ -30,7 +36,7 @@ module Scheme
       parse_error(filename)
     end
   end
-  
+
   def self.parse_error(filename)
     # if parsing failed -> output error message with reason
     puts "ParseError in #{filename} (line #{@parser.failure_line} / #{@parser.failure_column}):"
