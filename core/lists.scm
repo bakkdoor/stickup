@@ -91,5 +91,18 @@
 (define (reverse! seq)
   (callm reverse! seq))
 
+(define (remove-if pred-fn seq)
+  (filter (lambda (x) (not (pred-fn (x)))) seq))
+
+(define (compact seq)
+  (callm compact seq))
+
 (define (pairwise seq1 seq2)
   (callm zip seq1 seq2))
+
+(define (zip seqs)
+  (map (lambda (x) (compact (flatten x)))
+       (reduce pairwise '() seqs)))
+
+(define (flatten seq)
+  (callm flatten seq))

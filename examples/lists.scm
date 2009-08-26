@@ -29,6 +29,9 @@
   (pp (count even? numbers)))
 
 (let ((seq1 (upto 1 10))
-      (seq2 (upto 11 20)))
+      (seq2 (upto 11 20))
+      (seq3 (upto 21 30)))
   (print "pairwise:")
-  (pp (pairwise seq1 seq2)))
+  (pp (pairwise seq1 seq2))
+  (print "zipped (3 seqs):")
+  (pp (zip '(seq1 seq2 seq3))))
