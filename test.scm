@@ -19,4 +19,5 @@
       (b 2))
   (display a)
   (display b)
-  (display 10))
+  (setf a 9)
+  (display a))

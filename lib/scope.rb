@@ -56,6 +56,12 @@ class TopLevel < Scope
       end
     end
 
+    syntax('setf') do |scope, cells|
+      name = cells.first.text_value
+      value = cells[1].eval(scope)
+      scope[name] = value
+    end
+
     define('+') { |arg1, arg2| arg1 + arg2 }
     define('-') { |arg1, arg2| arg1 - arg2 }
     define('*') { |arg1, arg2| arg1 * arg2 }
@@ -63,7 +69,6 @@ class TopLevel < Scope
     define('=') { |arg1, arg2| arg1 == arg2 }
 
     define('display') { |x| puts x }
-    define('setf') { |arg, val| arg = val }
   end
 end
 
