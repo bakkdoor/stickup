@@ -15,3 +15,8 @@
 (display (add4 3))
 (display (add5 3))
 
+(let ((a 5)
+      (b 2))
+  (display a)
+  (display b)
+  (display 10))
