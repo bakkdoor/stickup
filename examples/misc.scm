@@ -13,3 +13,10 @@
   (print y)
   (print- "z: ")
   (print z))
+
+(if #t
+    (progn
+     (print "ok")
+     (print "ok2")
+     (print "ok3"))
+    (print "ohoh"))

@@ -23,6 +23,10 @@ module Primitives
         Function.new(scope, names, cells[1..-1])
       end
 
+      syntax('progn') do |scope, cells|
+        Function.new(scope, [], cells).call(scope, [])
+      end
+
       syntax('if') do |scope, cells|
         which = cells.first.eval(scope) ? cells[1] : cells[2]
         which.eval(scope)

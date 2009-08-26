@@ -25,3 +25,10 @@
   (pp (split-at 5 numbers))
   (print "reverse:")
   (pp (reverse numbers))
+  (print "amount of even numbers: ")
+  (pp (count even? numbers)))
+
+(let ((seq1 (upto 1 10))
+      (seq2 (upto 11 20)))
+  (print "pairwise:")
+  (pp (pairwise seq1 seq2)))

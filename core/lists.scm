@@ -45,6 +45,9 @@
   (unless (nil? seq2)
           (callm concat seq2 seq1)))
 
+(define (count pred-fn seq)
+  (length (filter pred-fn seq)))
+
 (define (drop n seq)
   (if (<= n 0)
       seq
@@ -87,3 +90,6 @@
 
 (define (reverse! seq)
   (callm reverse! seq))
+
+(define (pairwise seq1 seq2)
+  (callm zip seq1 seq2))
