@@ -5,7 +5,7 @@ grammar Lisp
 
   # comments start with '#' and end at the end of a line, as in ruby
   rule comment do
-    ";" (![\n] .)* [\n]? <Comment>
+    space* ";" (![\n] .)* [\n]? <Comment>
   end
 
   rule cell do
