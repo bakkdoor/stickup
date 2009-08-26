@@ -30,6 +30,7 @@ class TopLevel < Scope
     init_primitive_syntax
     init_primitive_functions
 
+    # define standard modules
     self["Kernel"] = Kernel
     self["PP"] = PP
   end

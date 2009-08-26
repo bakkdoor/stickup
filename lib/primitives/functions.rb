@@ -1,6 +1,8 @@
 module Primitives
   module Functions
     def init_primitive_functions
+      define('ruby-require') { |name| require(name) }
+
       define('+') { |arg1, arg2| arg1 + arg2 }
       define('-') { |arg1, arg2| arg1 - arg2 }
       define('*') { |arg1, arg2| arg1 * arg2 }
@@ -10,8 +12,10 @@ module Primitives
       define('>=') { |arg1, arg2| arg1 >= arg2 }
       define('and') { |arg1, arg2| arg1 && arg2 }
       define('or'){ |arg1, arg2| arg1 || arg2 }
+      define('not'){ |arg1| not arg1 }
 
       define('print') { |x| puts x }
+      define('print-'){ |x| print x }
 
       #define('callm') { |methodname, object, *args| object.send(methodname.to_sym, *args) }
 

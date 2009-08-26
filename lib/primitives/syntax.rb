@@ -1,6 +1,12 @@
 module Primitives
   module Syntax
     def init_primitive_syntax
+      syntax('require') do |scope, cells|
+        filename = cells.first.eval(scope)
+        filename += ".scm" unless filename.end_with?(".scm")
+        Scheme.parse_eval_file(filename, scope)
+      end
+
       syntax('define') do |scope, cells|
         first = cells.first
         case first
@@ -31,9 +37,25 @@ module Primitives
         first = cells.first
         case first
         when Lisp::List
-          names = first.cells.map{ |pair| pair.cells.first.text_value}
+          names = first.cells.map{ |pair| pair.cells.first.text_value }
           values = first.cells.map{ |pair| pair.cells[1] }
           Function.new(scope, names, cells[1..-1]).call(scope, values)
+        end
+      end
+
+      syntax('let*') do |scope, cells|
+        first = cells.first
+        case first
+        when Lisp::List
+          names = first.cells.map{ |pair| pair.cells.first.text_value }
+          values = first.cells.map{ |pair| pair.cells[1] }
+
+          let_scope = Scope.new(scope)
+          values.each_with_index do |val, i|
+            let_scope[names[i]] = val.eval(let_scope)
+          end
+
+          Function.new(scope, names, cells[1..-1]).call(let_scope, values)
         end
       end
 

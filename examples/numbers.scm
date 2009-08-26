@@ -1,3 +1,8 @@
+(require "examples/strings")
+
+;; wie can use the hello function from examples/strings
+(hello "world!")
+
 (define (fact x)
   (if (= x 0)
       1
@@ -21,3 +26,6 @@
   (print b)
   (set a 9)
   (print a))
+
+(pp (even? 5))
+(pp (even? 6))
