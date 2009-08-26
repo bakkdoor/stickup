@@ -29,6 +29,9 @@ class TopLevel < Scope
 
     init_primitive_syntax
     init_primitive_functions
+
+    self["Kernel"] = Kernel
+    self["PP"] = PP
   end
 end
 

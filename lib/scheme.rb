@@ -1,5 +1,6 @@
 require 'rubygems'
 require 'treetop'
+require 'pp'
 
 Treetop.load File.dirname(__FILE__) + '/lisp.treetop'
 ["primitives/syntax",

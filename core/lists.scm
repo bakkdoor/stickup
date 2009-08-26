@@ -51,3 +51,12 @@
   (if (<= n 0)
       '()
       (cons (first seq) (take (- n 1) (rest seq)))))
+
+(define (filter pred-fn seq)
+  (if (empty? seq)
+      '()
+      (let ((head (first seq))
+            (tail (rest seq)))
+        (if (pred-fn head)
+            (cons tail (filter pred-fn tail))
+            (filter pred-fn tail)))))

@@ -6,3 +6,6 @@
 
 (define (< obj1 obj2)
   (callm < obj1 obj2))
+
+(define (pp obj)
+  (callm pp PP obj))
