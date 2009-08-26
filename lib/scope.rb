@@ -56,6 +56,13 @@ class TopLevel < Scope
       end
     end
 
+    syntax('callm') do |scope, cells|
+      methodname = cells.first.text_value
+      obj = cells[1].eval(scope)
+      args = cells[2..-1].map{ |c| c.eval(scope) }
+      obj.send(methodname.to_sym, *args)
+    end
+
     syntax('list') do |scope, cells|
       Array.new(cells.map{|x| x.eval(scope)})
     end
@@ -71,10 +78,15 @@ class TopLevel < Scope
     define('*') { |arg1, arg2| arg1 * arg2 }
     define('/') { |arg1, arg2| arg1 / arg2 }
     define('=') { |arg1, arg2| arg1 == arg2 }
+    define('and') { |arg1, arg2| arg1 && arg2 }
+    define('or'){ |arg1, arg2| arg1 || arg2 }
 
     define('print') { |x| puts x }
+    
+    #define('callm') { |methodname, object, *args| object.send(methodname.to_sym, *args) }
+    
     define('car'){ |list| list.first }
-    define('cdr'){ |list| list[1..-1] }
+    define('cdr'){ |list| list[1..-1] }    
     define('empty?'){ |list| list.empty? }
     define('cons'){ |element, list| list << element }
     define('map'){ |func, list| list.map{ |e| func.call(self, [e]) } }

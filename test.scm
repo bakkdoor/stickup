@@ -22,21 +22,6 @@
   (set a 9)
   (print a))
 
-(define (reduce fn base-value lis)
-  (if (empty? lis)
-      base-value
-      (fn (car lis)
-	  (reduce fn base-value (cdr lis)))))
-
-
-(define (string-concat words)
-  (reduce (lambda (x y) (+ x y)) "" words))
-
-(define (string-join words join-string)  
-  (let ((words-with-join-string (map (lambda (word) (+ word join-string)) 
-				     words)))
-    (string-concat words-with-join-string)))
-
 (define (hello name)
   (let ((message (+ "hello, " name ", wie geht es dir?")))
     (print message)))
@@ -44,3 +29,11 @@
 (hello "christopher")
 
 (print (string-join (list "cool" "yo" "hehe") " "))
+
+(let ((numbers (list 1 2 3 4)))
+  (print "OK")
+  (if (any? (lambda (x) (> x 2)) numbers)
+      (print "there are some greater than 2!")
+      (print "there are none greater than 2!")))
+
+(print (rest (list 100 200 300)))
