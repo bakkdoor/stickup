@@ -9,7 +9,14 @@ module Lisp
     def eval(scope)
       func = cells.first.eval(scope)
       args = cells[1..-1]
-      func.call(scope, args)
+
+      if func.is_a?(Function)
+        func.call(scope, args)
+      else
+        name = cells.first.eval(scope) || cells.first.text_value
+        puts "Unkown function: '#{name}' isn't defined!"
+        exit
+      end
     end
 
     def cells
@@ -63,6 +70,6 @@ end
 
 class Array
   def rest
-    self[1..-1]
+    self[1..-1] || []
   end
 end
