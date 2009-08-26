@@ -16,7 +16,20 @@ module Lisp
       elements[1].elements.map { |c| c.data }
     end
   end
+
+  class QuotedList  < Treetop::Runtime::SyntaxNode
+    def eval(scope)
+    end
+    
+    def cells
+      elements[1].elements.map { |c| c.data }
+    end
+  end
   
+  class Comment < Treetop::Runtime::SyntaxNode
+    def eval(scope); nil; end
+  end
+
   class Cell < Treetop::Runtime::SyntaxNode
     def eval(scope); data.eval(scope); end
     def data; elements[1]; end
@@ -32,6 +45,18 @@ module Lisp
   
   class Identifier < Treetop::Runtime::SyntaxNode
     def eval(scope); scope[text_value]; end
+  end
+
+  class Float
+    def eval(scope); text_value.to_f; end
+  end
+
+  class LispString < Treetop::Runtime::SyntaxNode    
+    def eval(scope)
+      string_val.elements.collect{ |e| 
+        e.char.text_value
+      }.join("")
+    end
   end
 end
 

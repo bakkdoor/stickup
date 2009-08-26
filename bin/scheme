@@ -3,5 +3,6 @@
 $VERBOSE = nil
 
 require File.dirname(__FILE__) + '/../lib/scheme'
-puts Scheme.run(File.expand_path ARGV[0])
+debug_on = ARGV.include?("--debug")
+Scheme.run(File.expand_path(ARGV[0]), debug_on)
 

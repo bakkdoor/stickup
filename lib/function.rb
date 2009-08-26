@@ -6,7 +6,7 @@ class Function
   end
   
   def call(scope, args)
-    args = args.map { |a| a.eval(scope) }
+    args = args.map { |a| a.respond_to?(:eval) ? a.eval(scope) : a }
     return @body.call(*args) if primitive?
     closure = Scope.new(@scope)
     @formals.each_with_index { |name, i| closure[name] = args[i] }

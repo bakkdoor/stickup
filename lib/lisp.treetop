@@ -1,45 +1,70 @@
 grammar Lisp
-  rule program
-    cell* <Program>
+  rule program do
+    (comment / cell)* <Program>
+  end
+
+  # comments start with '#' and end at the end of a line, as in ruby
+  rule comment do
+    ";" (![\n] .)* [\n]? <Comment>
   end
   
-  rule cell
-    space* (list / atom) space* <Cell>
+  rule cell do
+    space* (list / atom / quoted_list) space* <Cell>
   end
   
-  rule list
+  rule list do
     "(" cell* ")" <List>
   end
   
-  rule atom
+  rule quoted_list do
+    "'(" cell* ")" <QuotedList>
+  end
+  
+  rule atom do
     datum / identifier
   end
   
-  rule datum
-    boolean / integer
+  rule datum do
+    boolean / integer / float / string
   end
   
-  rule boolean
+  rule boolean do
     ("#t" / "#f") <Boolean>
   end
   
-  rule integer
+  rule integer do
     ("0" / [1-9] [0-9]*) <Integer>
   end
+
+  rule float do
+    ([0-9]* "." [0-9]*) <Float>
+  end
+
+  rule string do
+    '"' string_val:(string_char)* '"' <LispString>
+  end
+ 
+  rule string_char do
+    !'"' char:(.) {
+      def value
+        self.char.text_value
+      end
+    }
+  end
   
-  rule identifier
+  rule identifier do
     (!delimiter .)+ <Identifier>
   end
   
-  rule space
+  rule space do
     [\s\n\r\t]
   end
   
-  rule paren
+  rule paren do
     [\(\)\[\]]
   end
   
-  rule delimiter
+  rule delimiter do
     paren / space
   end
 end

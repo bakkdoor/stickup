@@ -56,7 +56,11 @@ class TopLevel < Scope
       end
     end
 
-    syntax('setf') do |scope, cells|
+    syntax('list') do |scope, cells|
+      Array.new(cells.map{|x| x.eval(scope)})
+    end
+
+    syntax('set') do |scope, cells|
       name = cells.first.text_value
       value = cells[1].eval(scope)
       scope[name] = value
@@ -68,7 +72,12 @@ class TopLevel < Scope
     define('/') { |arg1, arg2| arg1 / arg2 }
     define('=') { |arg1, arg2| arg1 == arg2 }
 
-    define('display') { |x| puts x }
+    define('print') { |x| puts x }
+    define('car'){ |list| list.first }
+    define('cdr'){ |list| list[1..-1] }
+    define('empty?'){ |list| list.empty? }
+    define('cons'){ |element, list| list << element }
+    define('map'){ |func, list| list.map{ |e| func.call(self, [e]) } }
   end
 end
 
