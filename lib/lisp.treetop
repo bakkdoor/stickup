@@ -25,7 +25,7 @@ grammar Lisp
   end
 
   rule datum do
-    boolean / integer / float / string
+    boolean / integer / float / string / regex / array / hash / symbol
   end
 
   rule boolean do
@@ -48,6 +48,53 @@ grammar Lisp
     !'"' char:(.) {
       def value
         self.char.text_value
+      end
+    }
+  end
+
+  rule regex do
+    '/' (!'/' .)* '/' {
+      def eval(scope)
+        Regex.new(self.text_value)
+      end
+    }
+  end
+
+  rule array do
+    '[' space* items:(cell)* space* ']' {
+      def eval(scope)
+        if self.text_value =~ /\[\s*\]/
+          Array.new
+        else
+          items.elements.collect{ |i| i.eval(scope) }
+        end
+      end
+    }
+  end
+
+  rule hash do
+    '{{' space* entries:(space? entry:(hash_entry))* space* '}}' {
+      def eval(scope)
+        vals = entries.elements.collect do |ws_and_entry|
+          ws_and_entry.entry.eval(scope)
+        end
+        Hash[*vals.flatten]
+      end
+    }
+  end
+
+  rule hash_entry do
+    key:(cell) '=>' val:(cell) {
+      def eval(scope)
+        [key.eval(scope), val.eval(scope)]
+      end
+    }
+  end
+
+  rule symbol do
+    ':' symbol_name:(!':' identifier) {
+      def eval(scope)
+        symbol_name.text_value.to_sym
       end
     }
   end

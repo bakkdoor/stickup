@@ -382,8 +382,28 @@ module Lisp
           if r4
             r0 = r4
           else
-            @index = i0
-            r0 = nil
+            r5 = _nt_regex
+            if r5
+              r0 = r5
+            else
+              r6 = _nt_array
+              if r6
+                r0 = r6
+              else
+                r7 = _nt_hash
+                if r7
+                  r0 = r7
+                else
+                  r8 = _nt_symbol
+                  if r8
+                    r0 = r8
+                  else
+                    @index = i0
+                    r0 = nil
+                  end
+                end
+              end
+            end
           end
         end
       end
@@ -747,6 +767,455 @@ module Lisp
     end
 
     node_cache[:string_char][start_index] = r0
+
+    r0
+  end
+
+  module Regex0
+  end
+
+  module Regex1
+  end
+
+  module Regex2
+    def eval(scope)
+      Regex.new(self.text_value)
+    end
+  end
+
+  def _nt_regex
+    start_index = index
+    if node_cache[:regex].has_key?(index)
+      cached = node_cache[:regex][index]
+      @index = cached.interval.end if cached
+      return cached
+    end
+
+    i0, s0 = index, []
+    if has_terminal?('/', false, index)
+      r1 = instantiate_node(SyntaxNode,input, index...(index + 1))
+      @index += 1
+    else
+      terminal_parse_failure('/')
+      r1 = nil
+    end
+    s0 << r1
+    if r1
+      s2, i2 = [], index
+      loop do
+        i3, s3 = index, []
+        i4 = index
+        if has_terminal?('/', false, index)
+          r5 = instantiate_node(SyntaxNode,input, index...(index + 1))
+          @index += 1
+        else
+          terminal_parse_failure('/')
+          r5 = nil
+        end
+        if r5
+          r4 = nil
+        else
+          @index = i4
+          r4 = instantiate_node(SyntaxNode,input, index...index)
+        end
+        s3 << r4
+        if r4
+          if index < input_length
+            r6 = instantiate_node(SyntaxNode,input, index...(index + 1))
+            @index += 1
+          else
+            terminal_parse_failure("any character")
+            r6 = nil
+          end
+          s3 << r6
+        end
+        if s3.last
+          r3 = instantiate_node(SyntaxNode,input, i3...index, s3)
+          r3.extend(Regex0)
+        else
+          @index = i3
+          r3 = nil
+        end
+        if r3
+          s2 << r3
+        else
+          break
+        end
+      end
+      r2 = instantiate_node(SyntaxNode,input, i2...index, s2)
+      s0 << r2
+      if r2
+        if has_terminal?('/', false, index)
+          r7 = instantiate_node(SyntaxNode,input, index...(index + 1))
+          @index += 1
+        else
+          terminal_parse_failure('/')
+          r7 = nil
+        end
+        s0 << r7
+      end
+    end
+    if s0.last
+      r0 = instantiate_node(SyntaxNode,input, i0...index, s0)
+      r0.extend(Regex1)
+      r0.extend(Regex2)
+    else
+      @index = i0
+      r0 = nil
+    end
+
+    node_cache[:regex][start_index] = r0
+
+    r0
+  end
+
+  module Array0
+    def items
+      elements[2]
+    end
+
+  end
+
+  module Array1
+    def eval(scope)
+      if self.text_value =~ /\[\s*\]/
+        Array.new
+      else
+        items.elements.collect{ |i| i.eval(scope) }
+      end
+    end
+  end
+
+  def _nt_array
+    start_index = index
+    if node_cache[:array].has_key?(index)
+      cached = node_cache[:array][index]
+      @index = cached.interval.end if cached
+      return cached
+    end
+
+    i0, s0 = index, []
+    if has_terminal?('[', false, index)
+      r1 = instantiate_node(SyntaxNode,input, index...(index + 1))
+      @index += 1
+    else
+      terminal_parse_failure('[')
+      r1 = nil
+    end
+    s0 << r1
+    if r1
+      s2, i2 = [], index
+      loop do
+        r3 = _nt_space
+        if r3
+          s2 << r3
+        else
+          break
+        end
+      end
+      r2 = instantiate_node(SyntaxNode,input, i2...index, s2)
+      s0 << r2
+      if r2
+        s4, i4 = [], index
+        loop do
+          r5 = _nt_cell
+          if r5
+            s4 << r5
+          else
+            break
+          end
+        end
+        r4 = instantiate_node(SyntaxNode,input, i4...index, s4)
+        s0 << r4
+        if r4
+          s6, i6 = [], index
+          loop do
+            r7 = _nt_space
+            if r7
+              s6 << r7
+            else
+              break
+            end
+          end
+          r6 = instantiate_node(SyntaxNode,input, i6...index, s6)
+          s0 << r6
+          if r6
+            if has_terminal?(']', false, index)
+              r8 = instantiate_node(SyntaxNode,input, index...(index + 1))
+              @index += 1
+            else
+              terminal_parse_failure(']')
+              r8 = nil
+            end
+            s0 << r8
+          end
+        end
+      end
+    end
+    if s0.last
+      r0 = instantiate_node(SyntaxNode,input, i0...index, s0)
+      r0.extend(Array0)
+      r0.extend(Array1)
+    else
+      @index = i0
+      r0 = nil
+    end
+
+    node_cache[:array][start_index] = r0
+
+    r0
+  end
+
+  module Hash0
+    def entry
+      elements[1]
+    end
+  end
+
+  module Hash1
+    def entries
+      elements[2]
+    end
+
+  end
+
+  module Hash2
+    def eval(scope)
+      vals = entries.elements.collect do |ws_and_entry|
+        ws_and_entry.entry.eval(scope)
+      end
+      Hash[*vals.flatten]
+    end
+  end
+
+  def _nt_hash
+    start_index = index
+    if node_cache[:hash].has_key?(index)
+      cached = node_cache[:hash][index]
+      @index = cached.interval.end if cached
+      return cached
+    end
+
+    i0, s0 = index, []
+    if has_terminal?('{{', false, index)
+      r1 = instantiate_node(SyntaxNode,input, index...(index + 2))
+      @index += 2
+    else
+      terminal_parse_failure('{{')
+      r1 = nil
+    end
+    s0 << r1
+    if r1
+      s2, i2 = [], index
+      loop do
+        r3 = _nt_space
+        if r3
+          s2 << r3
+        else
+          break
+        end
+      end
+      r2 = instantiate_node(SyntaxNode,input, i2...index, s2)
+      s0 << r2
+      if r2
+        s4, i4 = [], index
+        loop do
+          i5, s5 = index, []
+          r7 = _nt_space
+          if r7
+            r6 = r7
+          else
+            r6 = instantiate_node(SyntaxNode,input, index...index)
+          end
+          s5 << r6
+          if r6
+            r8 = _nt_hash_entry
+            s5 << r8
+          end
+          if s5.last
+            r5 = instantiate_node(SyntaxNode,input, i5...index, s5)
+            r5.extend(Hash0)
+          else
+            @index = i5
+            r5 = nil
+          end
+          if r5
+            s4 << r5
+          else
+            break
+          end
+        end
+        r4 = instantiate_node(SyntaxNode,input, i4...index, s4)
+        s0 << r4
+        if r4
+          s9, i9 = [], index
+          loop do
+            r10 = _nt_space
+            if r10
+              s9 << r10
+            else
+              break
+            end
+          end
+          r9 = instantiate_node(SyntaxNode,input, i9...index, s9)
+          s0 << r9
+          if r9
+            if has_terminal?('}}', false, index)
+              r11 = instantiate_node(SyntaxNode,input, index...(index + 2))
+              @index += 2
+            else
+              terminal_parse_failure('}}')
+              r11 = nil
+            end
+            s0 << r11
+          end
+        end
+      end
+    end
+    if s0.last
+      r0 = instantiate_node(SyntaxNode,input, i0...index, s0)
+      r0.extend(Hash1)
+      r0.extend(Hash2)
+    else
+      @index = i0
+      r0 = nil
+    end
+
+    node_cache[:hash][start_index] = r0
+
+    r0
+  end
+
+  module HashEntry0
+    def key
+      elements[0]
+    end
+
+    def val
+      elements[2]
+    end
+  end
+
+  module HashEntry1
+    def eval(scope)
+      [key.eval(scope), val.eval(scope)]
+    end
+  end
+
+  def _nt_hash_entry
+    start_index = index
+    if node_cache[:hash_entry].has_key?(index)
+      cached = node_cache[:hash_entry][index]
+      @index = cached.interval.end if cached
+      return cached
+    end
+
+    i0, s0 = index, []
+    r1 = _nt_cell
+    s0 << r1
+    if r1
+      if has_terminal?('=>', false, index)
+        r2 = instantiate_node(SyntaxNode,input, index...(index + 2))
+        @index += 2
+      else
+        terminal_parse_failure('=>')
+        r2 = nil
+      end
+      s0 << r2
+      if r2
+        r3 = _nt_cell
+        s0 << r3
+      end
+    end
+    if s0.last
+      r0 = instantiate_node(SyntaxNode,input, i0...index, s0)
+      r0.extend(HashEntry0)
+      r0.extend(HashEntry1)
+    else
+      @index = i0
+      r0 = nil
+    end
+
+    node_cache[:hash_entry][start_index] = r0
+
+    r0
+  end
+
+  module Symbol0
+    def identifier
+      elements[1]
+    end
+  end
+
+  module Symbol1
+    def symbol_name
+      elements[1]
+    end
+  end
+
+  module Symbol2
+    def eval(scope)
+      symbol_name.text_value.to_sym
+    end
+  end
+
+  def _nt_symbol
+    start_index = index
+    if node_cache[:symbol].has_key?(index)
+      cached = node_cache[:symbol][index]
+      @index = cached.interval.end if cached
+      return cached
+    end
+
+    i0, s0 = index, []
+    if has_terminal?(':', false, index)
+      r1 = instantiate_node(SyntaxNode,input, index...(index + 1))
+      @index += 1
+    else
+      terminal_parse_failure(':')
+      r1 = nil
+    end
+    s0 << r1
+    if r1
+      i2, s2 = index, []
+      i3 = index
+      if has_terminal?(':', false, index)
+        r4 = instantiate_node(SyntaxNode,input, index...(index + 1))
+        @index += 1
+      else
+        terminal_parse_failure(':')
+        r4 = nil
+      end
+      if r4
+        r3 = nil
+      else
+        @index = i3
+        r3 = instantiate_node(SyntaxNode,input, index...index)
+      end
+      s2 << r3
+      if r3
+        r5 = _nt_identifier
+        s2 << r5
+      end
+      if s2.last
+        r2 = instantiate_node(SyntaxNode,input, i2...index, s2)
+        r2.extend(Symbol0)
+      else
+        @index = i2
+        r2 = nil
+      end
+      s0 << r2
+    end
+    if s0.last
+      r0 = instantiate_node(SyntaxNode,input, i0...index, s0)
+      r0.extend(Symbol1)
+      r0.extend(Symbol2)
+    else
+      @index = i0
+      r0 = nil
+    end
+
+    node_cache[:symbol][start_index] = r0
 
     r0
   end
