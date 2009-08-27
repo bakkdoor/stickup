@@ -26,10 +26,7 @@ module Primitives
       define('nil?'){ |obj| obj.nil? }
       define('map'){ |func, list| list.map{ |e| func.call(self, [e]) } }
 
-      define('<array>'){ [] }
-      define('array<<'){ |list| Array.new(list) }
-
-      define('<regex>'){ |str| Regexp.new(str) }
+      define('[]<<'){ |list| Array.new(list) }
     end
   end
 end
