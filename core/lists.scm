@@ -1,5 +1,17 @@
+(define (cadr seq)
+  (car (cdr seq)))
+
+(define (caddr seq)
+  (car (cdr (cdr seq))))
+
+(define (cadddr seq)
+  (car (cdr (cdr (cdr seq)))))
+
+(define (caddddr seq)
+  (car (cdr (cdr (cdr (cdr seq))))))
+
 (define (cons elem seq)
-  (let ((new-arr (insert! elem (<array>))))
+  (let ((new-arr (insert! elem [])))
     (if (nil? seq)
         new-arr
         (append! seq new-arr))))
@@ -106,3 +118,28 @@
 
 (define (flatten seq)
   (callm flatten seq))
+
+(define (unzip1 seqs)
+  (map car seqs))
+
+(define (unzip2 seqs)
+  (cons (map car seqs)
+        (map cadr seqs)))
+
+(define (unzip3 seqs)
+  (cons (map car seqs)
+        (map cadr seqs)
+        (map caddr seqs)))
+
+(define (unzip4 seqs)
+  (cons (map car seqs)
+        (map cadr seqs)
+        (map caddr seqs)
+        (map cadddr seqs)))
+
+(define (unzip5 seqs)
+  (cons (map car seqs)
+        (map cadr seqs)
+        (map caddr seqs)
+        (map cadddr seqs)
+        (map caddddr seqs)))
