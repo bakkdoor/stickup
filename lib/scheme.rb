@@ -2,18 +2,25 @@ require 'rubygems'
 require 'treetop'
 require 'pp'
 
-Treetop.load File.dirname(__FILE__) + '/lisp.treetop'
 ["primitives/syntax",
  "primitives/functions",
- "lisp",
+ "nodes",
  "scope",
  "function"].each do |path|
   require File.dirname(__FILE__) + '/' + path
 end
 
 module Scheme
-  def self.run(path, debug_on = false)
+  def self.run(path, dynparser = false, debug_on = false, argv = [])
+
+    if dynparser
+      Treetop.load File.dirname(__FILE__) + '/lisp.treetop'
+    else
+      require File.dirname(__FILE__) + "/lisp"
+    end
+
     scope = TopLevel.new
+    scope["ARGV"] = argv
 
     Dir["core/*.scm"].each do |file|
       parse_eval_file(file, scope)

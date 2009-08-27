@@ -4,5 +4,9 @@ $VERBOSE = nil
 
 require File.dirname(__FILE__) + '/../lib/scheme'
 debug_on = ARGV.include?("--debug")
-Scheme.run(File.expand_path(ARGV[0]), debug_on)
+dynparser = ARGV.include?("--dynamic")
+argv = ARGV
+argv.delete "--debug"
+argv.delete "--dynamic"
+Scheme.run(File.expand_path(ARGV[0]), dynparser, debug_on, argv)
 

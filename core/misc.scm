@@ -15,3 +15,16 @@
 
 (define (class obj)
   (callm class obj))
+
+(define (=~ obj regex)
+  (callm =~ obj regex))
+
+(define (dotimes n fn)
+  (dotimes' 0 n fn))
+
+(define (dotimes' n m fn)
+  (if (= n m)
+      nil
+      (progn
+       (fn n)
+       (dotimes' (+ n 1) m fn))))

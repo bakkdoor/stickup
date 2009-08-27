@@ -20,3 +20,5 @@
      (print "ok2")
      (print "ok3"))
     (print "ohoh"))
+
+(dotimes 10 (lambda (x) (print x)))

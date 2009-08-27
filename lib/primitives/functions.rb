@@ -28,6 +28,8 @@ module Primitives
 
       define('<array>'){ [] }
       define('array<<'){ |list| Array.new(list) }
+
+      define('<regex>'){ |str| Regexp.new(str) }
     end
   end
 end
