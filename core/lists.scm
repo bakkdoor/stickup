@@ -89,6 +89,13 @@
             (cons head (filter pred-fn tail))
             (filter pred-fn tail)))))
 
+(define (for-each proc-fn list)
+  (if (empty? (rest list))
+      (proc-fn (first list))
+      (progn
+       (proc-fn (first list))
+       (for-each proc-fn (rest list)))))
+
 (define (upto m n)
   (if (>= m n)
       '(m)

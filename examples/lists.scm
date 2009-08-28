@@ -49,3 +49,12 @@
   (pp (unzip4 seq))
   (print "unzip5:")
   (pp (unzip5 seq)))
+
+(let ((seq '(1 2 3 4 5)))
+  (for-each (lambda (x)
+              (progn
+               (print- (string-concat '("number: " (string x))))
+               (if (even? x)
+                   (print " (even)")
+                   (print " (not even)"))))
+            seq))
